@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: Patient Management System API
+  description: API documentation for the Patient Management System.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Local Dev server
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Dr. John Doe
+                email:
+                  type: string
+                  example: doctor@example.com
+                password:
+                  type: string
+                  example: securepass
+                role:
+                  type: string
+                  enum: [admin, doctor, patient]
+                  example: doctor
+      responses:
+        "201":
+          description: User registered successfully
+        "400":
+          description: User already exists
+
+  /api/auth/login:
+    post:
+      summary: Login a user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: doctor@example.com
+                password:
+                  type: string
+                  example: securepass
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: User not found
+        "401":
+          description: Invalid password
+
+  /api/users/me:
+    get:
+      summary: Get current user details
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User details retrieved successfully
+        "403":
+          description: Access denied
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

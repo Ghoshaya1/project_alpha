@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./database.db"
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     String // 'admin' | 'doctor' | 'patient'
+
+  // Relationships
+  doctorPatients      Patient[]     @relation("DoctorToPatients") // Doctors will have many patients
+  doctorAppointments  Appointment[] @relation("DoctorAppointments")
+  patientAppointments Appointment[] @relation("PatientAppointments")
+}
+
+model Patient {
+  id               String  @id @default(uuid())
+  name             String
+  age              Int
+  medicalHistory   String?
+  insuranceDetails String?
+
+  // Relationship with User (Doctor)
+  doctor   User?   @relation("DoctorToPatients", fields: [doctorId], references: [id])
+  doctorId String?
+}
+
+model Appointment {
+  id     String   @id @default(uuid())
+  date   DateTime
+  status String   @default("pending") // 'pending' | 'confirmed' | 'completed'
+
+  // Relationships with Users (Doctor & Patient)
+  doctor    User   @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  doctorId  String
+  patient   User   @relation("PatientAppointments", fields: [patientId], references: [id])
+  patientId String
+}
