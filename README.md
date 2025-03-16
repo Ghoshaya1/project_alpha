@@ -1,3 +1,4 @@
+´´´
 /patient-management-system
 ├── backend/                  # Backend API (Express.js + SQLite/PostgreSQL)
 │   ├── models/               # Sequelize ORM Models
@@ -17,6 +18,7 @@
 │
 ├── README.md                 # Project Documentation
 └── .env                      # Environment Variables
+´´´
 *** Phase 1 testing
 {
     "message": "User registered",
