@@ -26,7 +26,7 @@
         "id": "a186cd9f-ac90-4218-b318-ea8010619d3d",
         "name": "Dr. John Doe",
         "email": "doctor@example.com",
-        "password": "$2a$10$uyaQOYJp/vkYww8WocBVGut3xeWGmtcgEfYveHcMlfTKoKzfn4Ukq",
+        "password": "securepass",
         "role": "doctor"
     }
 }

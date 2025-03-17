@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Container, TextField, Button, Typography, Box, Paper, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Paper, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Register = () => {
+export default function Register() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "patient" });
   const navigate = useNavigate();
 
@@ -18,43 +19,88 @@ const Register = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <Paper elevation={3} sx={{ padding: 4, width: "100%" }}>
-          <Typography variant="h5" textAlign="center" gutterBottom>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Paper
+          elevation={6}
+          sx={{
+            padding: 4,
+            backgroundColor: "background.paper",
+            color: "text.primary",
+            borderRadius: 2,
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
             Register
           </Typography>
-          <form onSubmit={handleRegister}>
-            <TextField 
-              fullWidth margin="normal" label="Name" variant="outlined"
+          <Box component="form" onSubmit={handleRegister} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Full Name"
+              name="name"
+              autoFocus
+              value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              sx={{ input: { color: "white" } }}
             />
-            <TextField 
-              fullWidth margin="normal" label="Email" variant="outlined"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Email Address"
+              name="email"
+              value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              sx={{ input: { color: "white" } }}
             />
-            <TextField 
-              fullWidth margin="normal" label="Password" type="password" variant="outlined"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              sx={{ input: { color: "white" } }}
             />
             <FormControl fullWidth margin="normal">
               <InputLabel>Role</InputLabel>
               <Select
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                sx={{ color: "white" }}
               >
                 <MenuItem value="patient">Patient</MenuItem>
                 <MenuItem value="doctor">Doctor</MenuItem>
               </Select>
             </FormControl>
-            <Button fullWidth variant="contained" color="primary" type="submit">
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Register
             </Button>
-          </form>
+            <Grid container>
+              <Grid item>
+                <Link href="/" variant="body2" sx={{ color: "secondary.main" }}>
+                  {"Already have an account? Sign in"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
         </Paper>
       </Box>
     </Container>
   );
-};
-
-export default Register;
+}
