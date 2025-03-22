@@ -15,7 +15,7 @@ router.post('/', authMiddleware(['doctor']), async (req, res) => {
                 age,
                 medicalHistory,
                 insuranceDetails,
-                doctorId: req.user.userId,
+                doctorId: req.user.id,
             },
         });
 
@@ -43,4 +43,15 @@ router.get('/:id', authMiddleware(['doctor','patient']), async (req, res) => {
     }
 });
 
+router.delete('/:id', authMiddleware(['doctor']), async (req, res) => {
+    try {
+        const patient = await prisma.patient.delete({
+            where: { id: req.params.id },
+        });
+
+        res.json({ message: 'Patient deleted', patient });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete patient' });
+    }
+});
 module.exports = router;

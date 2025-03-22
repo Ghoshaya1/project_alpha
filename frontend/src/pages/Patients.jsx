@@ -6,7 +6,7 @@ const Patients = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const [newPatient, setNewPatient] = useState({ name: "", age: "", medicalHistory: "" });
+  const [newPatient, setNewPatient] = useState({ name: "", age: "", medicalHistory: "", insuranceDetails: "",  });
 
   useEffect(() => {
     fetchPatients();
@@ -29,13 +29,22 @@ const Patients = () => {
   const handleAddPatient = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/patients/", newPatient, {
+  
+      // 👇 Ensure age is sent as a number, not a string
+      const payload = {
+        ...newPatient,
+        age: Number(newPatient.age),
+      };
+  
+      await axios.post("http://localhost:5000/api/patients/", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
+  
       alert("Patient added successfully!");
       setOpen(false);
       fetchPatients(); // Refresh list
     } catch (err) {
+      console.error("❌ Error creating patient:", err.response?.data || err.message);
       alert("Error adding patient!");
     }
   };
@@ -46,7 +55,7 @@ const Patients = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/patients/${id}`,
+        `http://localhost:5000/api/patients/${id}`, 
         { name: newName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -92,7 +101,7 @@ const Patients = () => {
                   <ListItem key={patient.id} sx={{ display: "flex", justifyContent: "space-between" }}>
                     <ListItemText
                       primary={patient.name}
-                      secondary={`Age: ${patient.age} | Medical History: ${patient.medicalHistory}`}
+                      secondary={`Age: ${patient.age} | Medical History: ${patient.medicalHistory} | Insurance Details: ${patient.insuranceDetails}`}
                     />
                     <Box>
                       <Button color="primary" onClick={() => handleEditPatient(patient.id, patient.name)}>
@@ -139,6 +148,13 @@ const Patients = () => {
             label="Medical History"
             value={newPatient.medicalHistory}
             onChange={(e) => setNewPatient({ ...newPatient, medicalHistory: e.target.value })}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Insurance Details"
+            value={newPatient.insuranceDetails}
+            onChange={(e) => setNewPatient({ ...newPatient, insuranceDetails: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
