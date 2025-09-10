@@ -15,7 +15,7 @@ router.post('/', authMiddleware(['doctor']), async (req, res) => {
                 age,
                 medicalHistory,
                 insuranceDetails,
-                doctorId: req.user.id,
+                doctorId: req.user.userId,
             },
         });
 
