@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, Paper, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 
 export default function Register() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "patient" });
@@ -11,7 +11,7 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
+      await api.post('/auth/register', formData);
       navigate("/");
     } catch (err) {
       alert("Registration failed!");

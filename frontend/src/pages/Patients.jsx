@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Paper, Typography, Box, CircularProgress, List, ListItem, ListItemText, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import axios from "axios";
+import api from "../utils/api";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -14,10 +14,7 @@ const Patients = () => {
 
   const fetchPatients = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/users/my-patients", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/users/my-patients");
       setPatients(res.data);
     } catch (err) {
       console.error("Error fetching patients:", err);
@@ -28,7 +25,7 @@ const Patients = () => {
 
   const handleAddPatient = async () => {
     try {
-      const token = localStorage.getItem("token");
+
   
       // 👇 Ensure age is sent as a number, not a string
       const payload = {
@@ -36,9 +33,7 @@ const Patients = () => {
         age: Number(newPatient.age),
       };
   
-      await axios.post("http://localhost:5000/api/patients/", payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.post("/patients", payload);
   
       alert("Patient added successfully!");
       setOpen(false);
@@ -53,12 +48,7 @@ const Patients = () => {
     const newName = prompt("Enter new name:", currentName);
     if (!newName) return;
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/patients/${id}`, 
-        { name: newName },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(`/patients/${id}`, { name: newName });
       alert("Patient updated!");
       fetchPatients(); // Refresh list
     } catch (err) {
@@ -69,10 +59,7 @@ const Patients = () => {
   const handleDeletePatient = async (id) => {
     if (!window.confirm("Are you sure you want to delete this patient?")) return;
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/patients/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/patients/${id}`);
       alert("Patient deleted!");
       fetchPatients(); // Refresh list
     } catch (err) {
