@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Paper, Typography, Box, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
-import axios from "axios";
+import api from "../utils/api";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -9,10 +9,7 @@ const Appointments = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/appointments/my", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/appointments/my");
         setAppointments(res.data);
       } catch (err) {
         console.error("Error fetching appointments:", err);
