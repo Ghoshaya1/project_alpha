@@ -7,6 +7,24 @@ CREATE TABLE "User" (
     "role" TEXT NOT NULL
 );
 
+-- Insert default admin user
+INSERT INTO "User" ("id", "name", "email", "password", "role")
+VALUES (
+    'admin-0001',
+    'Admin',
+    'admin@example.com',
+    'admin123', -- bcrypt hash for 'admin123'
+    'admin'
+);
+
+INSERT INTO "User" ("id", "name", "email", "password", "role")
+VALUES (
+    'doctor-0001',
+    'Doctor',
+    'doctor@example.com',
+    'doctor123', -- bcrypt hash for 'admin123'
+    'doctor'
+);
 -- CreateTable
 CREATE TABLE "Appointment" (
     "id" TEXT NOT NULL PRIMARY KEY,
